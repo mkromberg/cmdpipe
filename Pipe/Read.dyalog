@@ -2,4 +2,5 @@
  ⍝ Read pipe to next NL
 
  ⎕RTL←timeout
- r←⎕UCS(,10)PIPE ⎕ARBIN ⍬
+ :Repeat r←⎕UCS(,10)PIPE ⎕ARBIN ⍬
+   :Until 0≠≢r

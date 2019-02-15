@@ -3,3 +3,4 @@
 
  PIPENAME←name
  PIPE←PIPENAME ⎕NTIE 0
+ r←PIPE
