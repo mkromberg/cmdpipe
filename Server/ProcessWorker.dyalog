@@ -1,5 +1,6 @@
-﻿ r←ProcessWorker command
+﻿ r←ProcessWorker args
+ ⍝ args are command and workerQNames
  ⎕←'WORKER READY MESSAGE: 'command
- WORKERS←WORKERS,⊂command
+ WORKERS←WORKERS,⊂args
  ⎕←WORKERS
  r←0

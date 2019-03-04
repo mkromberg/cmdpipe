@@ -1,4 +1,5 @@
- r←makeClient (ip port);ic;client;code;name
+ r←makeClient (ip port QNames);ic;client;code;name
+
  :If 0=⎕NC'Conga'
    'Conga'⎕CY'conga'
  :EndIf
@@ -11,4 +12,4 @@
    ('Error starting client: ', ⍕client) ⎕SIGNAL 700
  :EndIf
 
- r←ic name
+ r←ic name QNames
