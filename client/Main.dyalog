@@ -5,7 +5,7 @@
  commandName←client,'.WorkerReady'
 
 ⍝ the WORKER is ready to accept work
- ##.Utils.Check ic.Send commandName ('WORKER' QNames)
+ ##.Utils.Check ic.Send commandName ('WORKER' (QNames 'READY'))
 
  :While ~DONE
     (code command event task)←ic.Wait commandName 10000
@@ -24,7 +24,8 @@
         ⎕←'Process a task now'
         ⎕←task
         ⍝ After task is complete: WORKER IS READY
-        ##.Utils.Check ic.Send commandName ('WORKER' QNames)
+        ⍝ TODO: Report if there was an error
+        ##.Utils.Check ic.Send commandName ('WORKER' (QNames 'READY'))
     :Case 'Timeout'
         ⎕←'Max time waited'
     :EndSelect    

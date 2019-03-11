@@ -1,11 +1,17 @@
- r←Main(ic server);code;command;event;body;type;content;DONE;TODO;WORKERS
+ r←Main(ic server);code;command;event;body;type;content;DONE;TODO;WORKERS;WORKERSTATUS;Q_WORKERS_TABLE;Q_TODO_TABLE;QS
 
  ⍝ Call Main by calling Server.Make with a port number
  ⍝ Ex.) Server.Main Server.Make 3500
 
+⍝ add a list of historical total queues
+⍝ when a todo/worker mentions a queue, store them
  DONE←0
+ WORKERSTATUS←⍬
  WORKERS←⍬
  TODO←⍬
+ Q_WORKERS_TABLE←⍬
+ Q_TODO_TABLE←⍬
+ QS←⍬
  r←0
 
  ic.SetProp'.' 'EventMode' 1

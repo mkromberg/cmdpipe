@@ -1,51 +1,39 @@
-﻿ r←AssignWork dummy;n
+ r←AssignWork dummy;n;readyWorkers;getTodoIndices;getWorkerLocations;workerLocations;todoIndices;workersToAssign;uniqueIndices;todos;workers
  r←0
 
- MapWorkerAndTask←{
-     (Q m)←⊃TODO[⍵]
-     indices←,⍺(⍳⍤1)⊂Q
-     iir←indices≤≢¨↓⍺
-     index←iir⍳1
-     index ⍵
- }
+ readyWorkers←↑WORKERSTATUS×↓Q_WORKERS_TABLE
+ getTodoIndices←{⍸0<+/¨⍵}
+ getWorkerLocations←{{+/⍵(∧⍤1)readyWorkers}¨↓⍵}
 
  n←(≢TODO)⌊≢WORKERS
  :If n≠0
-⍝ TODO: (nathan) ADD SOME SORT OF HANDLING OF TODOS WHO SUBMIT WORK FOR QUEUES THAT CONTAIN NO WORKERS
-⍝ TODO: (nathan) PRESENTLY, IF THERE IS A WORKER, AND A NEW TASK CONTAINS A NEW QUEUE, THE SERVER CRASHES
-⍝ TODO: (nathan) TODO SHOULD SIMPLY BE IDLE UNTIL A WORKER APPEARS TO PROCESS THAT KIND OF QUEUE
+     workerLocations←getWorkerLocations Q_TODO_TABLE  ⍝ maps the todo queues to location of workers ready to process this queue
+     todoIndices←getTodoIndices workerLocations   ⍝ gets the indices of the todo which can be processed right now
+     workersToAssign←workerLocations[todoIndices]⍳¨1  ⍝ gets the indices of the workers who are ready to process a current task
 
-     workerTable←↑WORKERS      ⍝ the table of all workers, column 1 is the Conga Client Object
-     workerQs←↑workerTable[;2] ⍝ the table of queus, where each row relates to 1 worker
+     ⍝ if there are any workers available to work on the tasks
+     ⍝ presently in the queue
+     :If 0<≢workersToAssign
+        ⍝ only act on unique workers and only process a single case of todo for a given worker
+         uniqueIndices←workersToAssign⍳∪workersToAssign
+         todos←todoIndices[uniqueIndices]
+         workers←workersToAssign[uniqueIndices]
+         {ic.Respond(⊆WORKERS[⍺])(⊆TODO[⍵])}⌿⎕←↑workers todos
 
-     ⎕←'WORKERS:'
-     ⎕←↑WORKERS
-     
-     ⎕←'TODO:'
-     ⎕←↑TODO
+        ⍝ drop todos that had avilable workers
+         TODO←TODO[(⍳≢TODO)~todos]
 
-     workerTaskPairs ← ⊆ workerQs∘MapWorkerAndTask¨ ,⍳⍴ TODO   ⍝ the result is a list of 2 vectors, workerIndex taskIndex
-     workerIndices   ← 1 ⌷[2]  ↑ workerTaskPairs               ⍝ this is used below to assign WORKERS[workerIndex] the task of TODO[taskIndex]
-     firstOfUnique   ← workerIndices ⍳ (unique←∪workerIndices) ⍝ but first we get the index of the unique workers in the wtTable above
+        ⍝ drop the row in the Q over TODO table
+         Q_TODO_TABLE←Q_TODO_TABLE[(⍳⊃⍴Q_TODO_TABLE)~todos;]
 
+        ⍝ edge case when there are no items in the todo, prevents a 0 by n matrix
+         :If 0=⊃⍴Q_TODO_TABLE
+             Q_TODO_TABLE←⍬
+         :EndIf
 
-     ⍝ taking only the first of each unique worker from the worker task pairs, we divvy up the paired tasks
-     assignTaskToWorker←{ 
-         (workerIndex taskIndex)←⍵
-         (Q message)←⊃TODO[taskIndex]
-         ic.Respond (⎕←⊃workerTable[workerIndex;]) message
-     }
-
-     assignTaskToWorker¨(workerTaskPairs)[firstOfUnique]
-
-     withoutUnique ← (⍳⍴WORKERS)~unique
-     WORKERS       ← WORKERS[withoutUnique]
-
-     todoIndices   ← 2 ⌷[2] (↑ workerTaskPairs)[firstOfUnique;]  ⍝ todo indices, used to filter out the processed tasks
-     TODO          ← TODO[(⍳⍴TODO)~todoIndices]
-
-     r←'TASKS ASSIGNED TO WORKERS: ',⍕n
-
+        ⍝ set the status to 0→'BUSY' for all workers that have been assigned work
+         WORKERSTATUS×←~(⍳≢WORKERS)=workers
+     :EndIf
  :EndIf
 
 ⍝ for each worker send them some work
