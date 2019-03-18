@@ -11,21 +11,41 @@
     (code command event task)←ic.Wait commandName 10000
     :If code≠0
          DONE←1
-         ⎕←'Log This Error'
+         ⎕←'Unexpected Worker Error.'
         :Continue
     :EndIf
 
     :Select event
     :Case 'Close'
          DONE←1
-         ⎕←'Server closed the connection'
+         ⎕←'Server closed the connection.'
     :Case 'Receive'
         ⍝ TODO: PROCESS TASK
-        ⎕←'Process a task now'
-        ⎕←task
-        ⍝ After task is complete: WORKER IS READY
-        ⍝ TODO: Report if there was an error
-        ##.Utils.Check ic.Send commandName ('WORKER' (QNames 'READY'))
+        ⎕←'Processing: ' task 
+
+        success ← ~∨/ 'ERROR' ⍷ task
+
+        :If ∨/'DEBUG' ⍷ task
+            ⍝ only in 'DEBUG' status should the worker be unavailable
+            ⍝ log the failure
+            ⎕←'DEBUGGING NOW!' 
+            ⎕←'When finished debugging:'
+            ⎕←'1. Set success to 1 or 0'
+            ⎕←'2. and → RESUME'
+            ⎕←'3. Profit'
+            success←0
+            ##.Utils.Check ic.Send commandName ('WORKER' (QNames 'DEBUG'))
+            ⎕←ic.Wait command 10000
+            ...
+        :EndIf
+        RESUME:
+        ⍝ for testing if message contains error then throw error
+        ⍝ message contains: debug
+        ⍝ send message debug -> crash
+        ⍝ when the process resumes, send error or ready depending on result
+        ⍝ else return 'READY'
+        status  ← (success+1) ⊃ 'ERROR' 'READY'
+        ##.Utils.Check ic.Send commandName ('WORKER' (QNames status))
     :Case 'Timeout'
         ⎕←'Max time waited'
     :EndSelect    

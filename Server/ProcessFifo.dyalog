@@ -16,6 +16,6 @@
      Q_TODO_TABLE←(1 (≢QS))⍴QS∊⊆Q
  :EndIf
 
- ic.Respond fifoCommand'SUCCESS'
+ ic.Respond fifoCommand 'SUCCESS'
  TODO←TODO,⊆message
  r←0
