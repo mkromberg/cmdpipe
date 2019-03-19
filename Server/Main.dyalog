@@ -5,9 +5,11 @@
 
  ⍝ TODO: REFACTOR - update the table names
  ⍝ QvsWORKERS
+ DEBUG_MODE←1
  DONE r  ← 0
  WORKERS ← WORKERSTATUS ← Q_WORKERS_TABLE ← ⍬
- QS      ← TODO         ← Q_TODO_TABLE    ← ⍬
+ ERROR_HISTORY ←   TODO ← Q_TODO_TABLE    ← ⍬
+ QS←⊂'DEFAULT'
  ERROR_HISTORY ← ⍬
 
  PrintState ← {
@@ -40,7 +42,6 @@
              ProcessFifo ic command content
 
          :ElseIf type≡'WORKER'
-             ⎕←'why is this happening?'
              ProcessWorker command content
          :EndIf
 

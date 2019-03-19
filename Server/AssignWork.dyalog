@@ -2,7 +2,7 @@
  r←0
 
  readyWorkers       ← ↑(1=WORKERSTATUS) × ↓Q_WORKERS_TABLE
- getTodoIndices     ← {⍸ 0< +/ ¨⍵}
+ getTodoIndices     ← { ⍸ 0< +/ ¨⍵ }
  getWorkerLocations ← {{ +/⍵ (∧⍤1) readyWorkers}¨ ↓⍵ }
 
  :If 0≠ ⌊/ ≢¨TODO WORKERS
@@ -20,23 +20,17 @@
          {ic.Respond WORKERS[⍺], TODO[⍵]} ⌿ ↑workers todos
 
         ⍝ drop todos that had avilable workers
-         TODO←TODO[(⍳≢TODO)~todos]
+         TODO←TODO[( ⍳≢TODO )~todos]
 
         ⍝ drop the row in the Q over TODO table
-         Q_TODO_TABLE←Q_TODO_TABLE[(⍳⊃⍴Q_TODO_TABLE)~todos;]
+         Q_TODO_TABLE←Q_TODO_TABLE[( ⍳ ⊃⍴Q_TODO_TABLE )~todos ;]
 
         ⍝ edge case when there are no items in the todo, prevents a 0 by n matrix
-         :If 0=⊃⍴Q_TODO_TABLE
+         :If 0= ⊃ ⍴Q_TODO_TABLE
              Q_TODO_TABLE←⍬
          :EndIf
 
         ⍝ set the status to 0→'BUSY' for all workers that have been assigned work
-         WORKERSTATUS×←~(⍳≢WORKERS)=workers
+         WORKERSTATUS ×← ~( ⍳≢WORKERS ) = workers
      :EndIf
  :EndIf
-
-⍝ for each worker send them some work
-⍝ :If n≠0
-⍝     (ic.Respond⍤1) (n↑WORKERS),⍪n↑TODO
-⍝     (WORKERS TODO)←n↓¨WORKERS TODO
-⍝ :EndIf

@@ -26,8 +26,10 @@
         success ← ~∨/ 'ERROR' ⍷ task
 
         :If ∨/'DEBUG' ⍷ task
-            ⍝ only in 'DEBUG' status should the worker be unavailable
-            ⍝ log the failure
+            ⍝ for testing if message contains error then throw error
+            ⍝ message contains: debug
+            ⍝ send message debug -> crash
+            ⍝ when the process resumes, send error or ready depending on result
             ⎕←'DEBUGGING NOW!' 
             ⎕←'When finished debugging:'
             ⎕←'1. Set success to 1 or 0'
@@ -39,10 +41,6 @@
             ...
         :EndIf
         RESUME:
-        ⍝ for testing if message contains error then throw error
-        ⍝ message contains: debug
-        ⍝ send message debug -> crash
-        ⍝ when the process resumes, send error or ready depending on result
         ⍝ else return 'READY'
         status  ← (success+1) ⊃ 'ERROR' 'READY'
         ##.Utils.Check ic.Send commandName ('WORKER' (QNames status))
