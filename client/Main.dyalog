@@ -36,7 +36,7 @@
             ⎕←'2. and → RESUME'
             ⎕←'3. Profit'
             success←0
-            ##.Utils.Check ic.Send commandName ('WORKER' (QNames 'DEBUG'))
+            ##.Utils.Check ic.Send commandName ('WORKER' (('Error proccessing: ' task) 'DEBUG'))
             ⎕←ic.Wait command 10000
             ...
         :EndIf

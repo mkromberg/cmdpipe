@@ -9,16 +9,19 @@
  DONE r  ← 0
  WORKERS ← WORKERSTATUS ← Q_WORKERS_TABLE ← ⍬
  ERROR_HISTORY ←   TODO ← Q_TODO_TABLE    ← ⍬
- QS←⊂'DEFAULT'
- ERROR_HISTORY ← ⍬
+
+ QS ← DEFAULT ← ⊂'DEFAULT'
 
  PrintState ← {
-     ⎕←'Worker table'
+     ⎕←'Worker table:'
      ⎕←('worker command name' 'status',QS)⍪(WORKERS,WORKERSTATUS,Q_WORKERS_TABLE)
      ⎕←''
 
-     ⎕←'TODO TABLE'
+     ⎕←'TODO TABLE:'
      ⎕←((⊂'Todo message'),QS)⍪(TODO,Q_TODO_TABLE)
+     ⎕←''
+     ⎕←'ERROR HISTORY:'
+     ⎕←↑ERROR_HISTORY
      ⎕←''
  }
 

@@ -1,2 +1,2 @@
 r←Override message
-r←⊂'DEFAULT'
+r←DEFAULT

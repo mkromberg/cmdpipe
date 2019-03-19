@@ -1,5 +1,6 @@
 r←RemoveWorker command
-⎕←'REMOVING ' command
+⎕←'REMOVING ' command ' FROM THE WORKER Q.'
+⎕←'' 
 index     ← WORKERS⍳⊆command
 remaining ← (⍳≢WORKERS)~index
 
