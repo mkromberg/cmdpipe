@@ -1,10 +1,8 @@
-r←RemoveWorker command
-⎕←'REMOVING ' command ' FROM THE WORKER Q.'
-⎕←'' 
-index     ← WORKERS⍳⊆command
-remaining ← (⍳≢WORKERS)~index
+ r←RemoveWorker command
+ ⎕←'REMOVING 'command' FROM THE WORKER Q.'
+ ⎕←''
+ keep←~((≢command)↑¨WORKERS)∊⊂command
 
-WORKERS         ← WORKERS[remaining]
-WORKERSTATUS    ← WORKERSTATUS[remaining]
-Q_WORKERS_TABLE ← Q_WORKERS_TABLE[remaining;]
-
+ WORKERS←keep/WORKERS
+ WORKERSTATUS←keep/WORKERSTATUS
+ Q_WORKERS_TABLE←keep⌿Q_WORKERS_TABLE

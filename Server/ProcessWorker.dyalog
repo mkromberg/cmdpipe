@@ -3,13 +3,12 @@
  statuses←'DEBUG' 'BUSY' 'READY'
  getStatus←{(statuses⍳⊆⍵)-2}
 
- ⍝ add a status message below to enable debugging
- ⍝ status should report either success or error details
  (worker message) ← args    ⍝ for more information about this data structure
- (qs status)      ← message ⍝ see ../client/Main.dyalog
+ (body status)      ← message ⍝ see ../client/Main.dyalog
 
 :Select status
-:Case 'READY'
+:Case 'START' ⍝ add worker to qs add new qs to qs table
+    qs←body
     AddNewQ qs
     eqs←DEFAULT,⊆qs
     :If ~(⊆worker)∊WORKERS
@@ -21,9 +20,22 @@
             Q_WORKERS_TABLE←(1(≢QS))⍴QS∊eqs
         :EndIf
     :EndIf
+    status←'READY'
+
+
+:Case 'FINISHED' ⍝ record results and task
+    (task result)←body
+    RESULT_HISTORY,←⊂body
+    status←'READY'
+
+:Case 'READY'
+    debugMessage←'WORKER IS READY'
+
 :Case 'ERROR'
     status←'READY' ⍝ worker should be ready after an error occurs
+
 :Case 'DEBUG'
+    qs←body
     ⎕←'DEBUG MESSAGE: '
     ⎕←debugMessage←qs
     ⎕←''

@@ -1,4 +1,9 @@
 r←AddNewQ newQS
+ ⎕←'TESTING NEW QS: 'newQS
+ :If (⊂'WORKER')∊ newQS
+ ...
+   
+ :EndIf
  eqs←⊆newQS
  QS,←new←⊆(~eqs∊QS)/eqs
  

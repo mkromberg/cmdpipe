@@ -8,7 +8,8 @@
  DEBUG_MODE←1
  DONE r  ← 0
  WORKERS ← WORKERSTATUS ← Q_WORKERS_TABLE ← ⍬
- ERROR_HISTORY ←   TODO ← Q_TODO_TABLE    ← ⍬
+ ERROR_HISTORY  ←  TODO ← Q_TODO_TABLE    ← ⍬
+ TASK_COMPLETED_HISTORY ← RESULT_HISTORY ← ⍬
 
  QS ← DEFAULT ← ⊂'DEFAULT'
 
@@ -20,8 +21,13 @@
      ⎕←'TODO TABLE:'
      ⎕←((⊂'Todo message'),QS)⍪(TODO,Q_TODO_TABLE)
      ⎕←''
+
      ⎕←'ERROR HISTORY:'
      ⎕←↑ERROR_HISTORY
+     ⎕←''
+
+     ⎕←'RESULTS: '
+     ⎕←('TASK' 'RESULT')⍪↑RESULT_HISTORY
      ⎕←''
  }
 
@@ -46,6 +52,18 @@
 
          :ElseIf type≡'WORKER'
              ProcessWorker command content
+
+         :ElseIf type≡'ADMIN'
+             ⍝ can command/control/request status/health
+             ⍝ 1. request status -> nested array that contains canonical info
+             ⍝ 2. enable and disable debugging for specific WORKER
+             ⍝    - modify debugging code
+             ⍝    - should run specified user function
+             ⍝    - depending on if debugging is allowed
+             ⍝        - TODO(MORTEN): setup trapping
+             ⍝    - if debugging is off
+             ⍝        - trap errors in specified function
+             ⍝        - report error
          :EndIf
 
      :Case 'Connect'
