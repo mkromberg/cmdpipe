@@ -8,6 +8,7 @@
 ⍝ OVERRIDEQ returns Q as default
 ⍝ user specifies an override to the function to handle different Q logic
 ⍝ Q←Q OVERRIDEQ message
+
  Q←message DefaultOverrideQ Q
 
  AddNewQ Q

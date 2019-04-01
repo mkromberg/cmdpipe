@@ -55,6 +55,7 @@
 
          :ElseIf type≡'ADMIN'
              ⍝ can command/control/request status/health
+             ProcessAdmin command content
              ⍝ 1. request status -> nested array that contains canonical info
              ⍝ 2. enable and disable debugging for specific WORKER
              ⍝    - modify debugging code
