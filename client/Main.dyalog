@@ -1,4 +1,4 @@
- r←Main(ic client QNames);DONE;code;command;event;task;commandName
+ r←Main(QNames ic client);DONE;code;command;event;task;commandName
 
  DONE←0
  ic.SetProp'.' 'EventMode' 1
@@ -8,7 +8,7 @@
  ##.Utils.Check ic.Send commandName('WORKER'(QNames 'START'))
 
  :While ~DONE
-     (code command event task)←ic.Wait commandName 10000
+     (code command event task)←a←ic.Wait commandName 10000
      :If code≠0
          DONE←1
          ⎕←'Unexpected Worker Error.'
@@ -27,9 +27,11 @@
 
          :If ∨/'DEBUG'⍷task
              a←'1÷0'
-             EXEC a
+             EXEC task
+
          :Else
-             EXEC'1+1'
+
+             EXEC task
          :EndIf
 
      :Case 'Timeout'

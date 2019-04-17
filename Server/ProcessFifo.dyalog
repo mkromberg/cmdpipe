@@ -1,4 +1,4 @@
- r←ProcessFifo(ic fifoCommand content)
+ r←ProcessFifo(ic fifoCommand content);Q;message
  (Q message)←content
  ⎕←'Incoming FIFO message: ',message
 
@@ -12,13 +12,16 @@
  Q←message DefaultOverrideQ Q
 
  AddNewQ Q
+
  :If Q_TODO_TABLE≢⍬
      Q_TODO_TABLE⍪←QS∊(⊆Q)
  :Else
-     Q_TODO_TABLE←(1 (≢QS))⍴QS∊⊆Q
+     Q_TODO_TABLE←(1(≢QS))⍴QS∊⊆Q
  :EndIf
+ PROCESSED,←0
 
- TODO←TODO,⊆message
- ic.Respond fifoCommand 'SUCCESS'
+ TASK_ID,←1+≢TASK_ID
+ TODO,←(⊂message ⎕TS)
+ ic.Respond fifoCommand'SUCCESS'
 
  r←0

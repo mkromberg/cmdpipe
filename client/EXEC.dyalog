@@ -11,6 +11,7 @@ r←⍎expr
 ⎕←'Process successful. Sending results to server...'
 
 status←(success+1)⊃'ERROR' 'FINISHED'
+
 ##.Utils.Check ic.Send commandName('WORKER' ((expr r) status))
 
 →0
