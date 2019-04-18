@@ -2,7 +2,6 @@
 
  :If 0=⎕NC'Conga'
      'Conga'⎕CY'conga'
-
  :EndIf
 
  ic←Conga.Init''

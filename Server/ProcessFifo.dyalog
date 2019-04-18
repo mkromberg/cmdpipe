@@ -13,15 +13,15 @@
 
  AddNewQ Q
 
- :If Q_TODO_TABLE≢⍬
-     Q_TODO_TABLE⍪←QS∊(⊆Q)
+ :If QvsTASKS≢⍬
+     QvsTASKS⍪←QS∊(⊆Q)
  :Else
-     Q_TODO_TABLE←(1(≢QS))⍴QS∊⊆Q
+     QvsTASKS←(1(≢QS))⍴QS∊⊆Q
  :EndIf
  PROCESSED,←0
 
  TASK_ID,←1+≢TASK_ID
- TODO,←(⊂message ⎕TS)
+ TASKS,←(⊂message ⎕TS)
  ic.Respond fifoCommand'SUCCESS'
 
  r←0

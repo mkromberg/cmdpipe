@@ -6,8 +6,10 @@
 
  :Select action
  :Case 'startworker'
-  ⍝ standalone process
-     ic.Respond command((action': '),'Worker start is not implemented')
+     a← ∊{⍺' '⍵}/args
+     ⍝ standalone process
+     w←⎕NEW APLProcess ('s' a)
+     ic.Respond command((action': '),'Worker workspace started. TODO, before responding, wait to get successful status back from the process')
      ⎕←'starting worker'
 
 
@@ -17,7 +19,7 @@
      ⎕←'DEBUG UPDATED: 'DEBUG_MODE
 
  :Case 'workerinfo'
-     result←('worker command name' 'status',QS)⍪(WORKERS,WORKERSTATUS,Q_WORKERS_TABLE)
+     result←('worker command name' 'status',QS)⍪(WORKERS,WORKERSTATUS,QvsWORKERS)
      ic.Respond command((action':\n'),result)
 
      ⎕←'WORKER INFO REQUESTED'

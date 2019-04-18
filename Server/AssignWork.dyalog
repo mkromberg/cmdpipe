@@ -6,10 +6,10 @@
  ⍝ Therefore this branch holds true only when there are workers able to
  ⍝ process an unprocessed task
  :If 0≠⌊/≢¨(⍳+/~PROCESSED) WORKERS
-    ⍝ set the entire row to zero in Q_WORKERS_TABLE if worker is not ready
-    unprocessed    ← (~PROCESSED) ⌿Q_TODO_TABLE
+    ⍝ set the entire row to zero in QvsWORKERS if worker is not ready
+    unprocessed    ← (~PROCESSED) ⌿QvsTASKS
     ids            ← (~PROCESSED)/TASK_ID
-    todo           ← (~PROCESSED)/TODO
+    todo           ← (~PROCESSED)/TASKS
     readyWorkers   ← ↑ (1=WORKERSTATUS) ×↓unprocessed
     getTodoIndices ← {⍸ 0< +/ ¨⍵}
     getWorkerLocations←{{+/⍵ (∧⍤1) readyWorkers}¨↓⍵}
@@ -20,6 +20,7 @@
     workerLocations ← getWorkerLocations unprocessed  ⍝ maps the TODO Qs to location of workers ready to process this Q
     todoIndices     ← getTodoIndices workerLocations  ⍝ indices of the todo which can be processed right now
     workersToAssign ← workerLocations[todoIndices]⍳¨1 ⍝ indices of the workers who are ready to process a current task
+    ...
 
     ⍝ If there are any workers available to work on the tasks
     ⍝ presently in the Q

@@ -1,33 +1,58 @@
- r←Main(ic server);code;command;event;body;type;content;DONE;TODO;WORKERS;WORKERSTATUS;Q_WORKERS_TABLE;Q_TODO_TABLE;QS;WORKERS_TIME;DEBUG_MODE;RESULT_HISTORY;TASK_COMPLETED_HISTORY;ERROR_HISTORY;DEFAULT;PROCESSED;TASK_ID
+ r←Main(ic server);code;command;event;body;type;content;DONE;TODO;WORKERS;WORKERSTATUS;QvsWORKERS;QvsTASKS;QS;WORKERS_TIME;DEBUG_MODE;RESULT_HISTORY;ERROR_HISTORY;DEFAULT;PROCESSED;TASK_ID
 
- ⍝ Call Main by calling Server.Make with a port number
- ⍝ Ex.) Server.Main Server.Make 3500
- ⍝ TODO: REFACTOR - update the table names
- ⍝ QvsWORKERS
+⍝ Requred for starting a worker process in ProcessAdmin
+⎕SE.UCMD 'Load APLProcess'
 
- DEBUG_MODE←1
- DONE r←0
 
- WORKERS←WORKERS_TIME←WORKERSTATUS←Q_WORKERS_TABLE←⍬
- TODO←Q_TODO_TABLE←⍬ ⍝ A TODO item is a task that has yet to be started
- TASK_ID←⍬
- PROCESSED←⍬
+ ⍝ N.B. Call Main by passing the result Server.Make 
 
- TASK_COMPLETED_HISTORY←RESULT_HISTORY←⍬
+ DEBUG_MODE ← 1
+ DONE r     ← 0
+ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+ ⍝        WORKERS          ⍝
+ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+ 
+ WORKERS      ← ⍬
+ WORKERS_TIME ← ⍬
+ WORKERSTATUS ← ⍬
+ QvsWORKERS   ← ⍬
 
- ERROR_HISTORY←⍬
+ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+ ⍝        TASKS            ⍝
+ ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+ ⍝ TASKS Data type is a dynamic data type
+ ⍝ Nested vector containing the columns noted in the columns variable
+ columns←'Task' 'Time Submitted' 'Time Started' 'Time Completed'
+ TASKS ← ⍬
+
+ ⍝ QvsTASKS is a boolean matrix which notes to which q a task belongs
+ ⍝ with 3 qs in memory, a task assigned to the second q would have a record such as:
+ ⍝ 0 1 0 
+ QvsTASKS ← ⍬ 
+
+ ⍝ the TASK_ID is basically an index of the task itself
+ ⍝ this is passed to the worker so the server knows which task to update upon completion
+ TASK_ID ← ⍬
+
+ ⍝ a boolean vector denoting whether a task has been assign to a worker
+ PROCESSED ← ⍬
+
+ RESULT_HISTORY←⍬
+ ERROR_HISTORY ←⍬
+
+ ⍝ QS is a nested character vector tracking all QS
+ ⍝ If no Q is assigned to a worker or task, the default Q is assigned
  QS←DEFAULT←⊂'DEFAULT'
 
+ ⍝ a gui function displaying the current state
  PrintState←{
      ⎕←'Worker table:'
-     ⎕←('WORKER COMMAND NAME' 'READY TIME' 'STATUS',QS)⍪(WORKERS,WORKERS_TIME,WORKERSTATUS,Q_WORKERS_TABLE)
-     ⎕←WORKERS_TIME
+     ⎕←('WORKER COMMAND NAME' 'READY TIME' 'STATUS',QS)⍪(WORKERS,WORKERS_TIME,WORKERSTATUS,QvsWORKERS)
      ⎕←''
 
-     columns←'Message' 'Time Submitted' 'Time Started' 'Time Completed'
-     n←⊃⌽⍴↑TODO
-     ⎕←'TODO TABLE:'
-     ⎕←(('ID' 'PROCESSED',QS)⍪(TASK_ID,PROCESSED,Q_TODO_TABLE)),(n↑columns)⍪↑TODO
+     n←⊃⌽⍴↑TASKS
+     ⎕←'TASKS TABLE:'
+     ⎕←(('ID' 'PROCESSED',QS)⍪(TASK_ID,PROCESSED,QvsTASKS)),(n↑columns)⍪↑TASKS
      ⎕←''
 
      ⎕←'ERROR HISTORY:'
@@ -55,25 +80,16 @@
 
      :Select event
      :Case 'Receive'
-         :If type≡'FIFO'
+         :Select type
+	 :Case 'FIFO'
              ProcessFifo ic command content
 
-         :ElseIf type≡'WORKER'
+         :Case 'WORKER'
              ProcessWorker command content
 
-         :ElseIf type≡'ADMIN'
-             ⍝ can command/control/request status/health
+         :Case 'ADMIN'
              ProcessAdmin command content ic
-             ⍝ 1. request status -> nested array that contains canonical info
-             ⍝ 2. enable and disable debugging for specific WORKER
-             ⍝    - modify debugging code
-             ⍝    - should run specified user function
-             ⍝    - depending on if debugging is allowed
-             ⍝        - TODO(MORTEN): setup trapping
-             ⍝    - if debugging is off
-             ⍝        - trap errors in specified function
-             ⍝        - report error
-         :EndIf
+         :EndSelect
 
      :Case 'Connect'
         ⍝ TODO: Handle connect?
