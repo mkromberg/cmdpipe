@@ -6,6 +6,20 @@
  ⍝ Therefore this branch holds true only when there are workers able to
  ⍝ process an unprocessed task
  :If 0≠⌊/≢¨(⍳+/~PROCESSED) WORKERS
+
+
+     ⍝ Written by Adam. Uses statystical analysis to determine which Q to process in which order
+     ⍝ First find the Q to Process
+     ⍝ Finging found the Q, find the worker who can process the Q
+     ⍝ Assign the worker and 0 out the worker status/unprocessed
+     ⍝ Repeat until there are no more tasks read to be process, or there are no more workers ready
+     freq      ←{(⊢÷+/){¯1+≢⍵} ⌸ (⍳≢QS),⍵}
+     findWorker←{⊃⍒ QvsWORKERS[;⍵] ÷ +/QvsWORKERS(×⍤1 1)freq ⍺}
+     getQ      ←{⊃⍒(freq ⍵)÷freq 2⊃¨⍸(1=WORKERSTATUS)×⍤0 1⊢QvsWORKERS}
+
+     ⍝selectedWorker← findWorker∘getQ⍨ unprocessed  (⍳⍤1) 1
+     ...
+
     ⍝ set the entire row to zero in QvsWORKERS if worker is not ready
     unprocessed    ← (~PROCESSED) ⌿QvsTASKS
     ids            ← (~PROCESSED)/TASK_ID
@@ -13,16 +27,9 @@
     readyWorkers   ← ↑ (1=WORKERSTATUS) ×↓unprocessed
     getTodoIndices ← {⍸ 0< +/ ¨⍵}
     getWorkerLocations←{{+/⍵ (∧⍤1) readyWorkers}¨↓⍵}
-   
-    ⍝ If there are both at least one work and one TODO item
-    ⍝ then cross reference the Q required by the TODO item
-    ⍝ with the WORKERS in that Q
-    workerLocations ← getWorkerLocations unprocessed  ⍝ maps the TODO Qs to location of workers ready to process this Q
-    todoIndices     ← getTodoIndices workerLocations  ⍝ indices of the todo which can be processed right now
-    workersToAssign ← workerLocations[todoIndices]⍳¨1 ⍝ indices of the workers who are ready to process a current task
-    ...
 
-    ⍝ If there are any workers available to work on the tasks
+    selectedWorkers←∪(⍉QvsWORKERS[;unprocessed(⍳⍤1)1]) (⍳⍤1) 1
+
     ⍝ presently in the Q
     :If 0< ≢workersToAssign
 

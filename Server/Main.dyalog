@@ -12,14 +12,26 @@
  ⍝        WORKERS          ⍝
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
  
+ ⍝ WORKERS is a nested character vector of "command names"
+ ⍝ which are used to respond using Conga
  WORKERS      ← ⍬
+
+ ⍝ WORKERS_TIME is a list of ⎕TS tracking the time a given
+ ⍝ WORKER first reported as being ready 
  WORKERS_TIME ← ⍬
+
+ ⍝ WORKERSTATUS functions as a boolean vector, but in reality is
+ ⍝ 3 value vector ranging from ¯1 and 1, where 1 is ready, 0 is busy, and ¯1 is error
  WORKERSTATUS ← ⍬
+
+ ⍝ a boolean matrix where each row is a worker and each column is a Q
+ ⍝ keeps track of which worker can process which Q
  QvsWORKERS   ← ⍬
 
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
  ⍝        TASKS            ⍝
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
+ 
  ⍝ TASKS Data type is a dynamic data type
  ⍝ Nested vector containing the columns noted in the columns variable
  columns←'Task' 'Time Submitted' 'Time Started' 'Time Completed'
