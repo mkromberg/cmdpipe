@@ -26,11 +26,8 @@
          success←~∨/'ERROR'⍷task
 
          :If ∨/'DEBUG'⍷task
-             a←'1÷0'
              EXEC task
-
          :Else
-
              EXEC task
          :EndIf
 

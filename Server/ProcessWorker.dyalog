@@ -25,9 +25,12 @@
      status←'READY'
 
 
+
+
  :Case 'FINISHED' ⍝ record results and task
-     (task result)←body
-     RESULT_HISTORY,←⊂body
+     (task_id timeStarted timeCompleted expr r) ← 5↑body
+     RESULT_HISTORY,←⊂expr r
+     TODO[task_id]←⊂(⊃TODO[task_id]),timeStarted timeCompleted
      status←'READY'
 
  :Case 'READY'
