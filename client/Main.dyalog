@@ -1,6 +1,6 @@
- r←Main(QNames ic client);DONE;code;command;event;task;commandName
+ r←Main(QNames ic client);DONE;code;command;event;task;commandName;DEBUG
 
- DONE←0
+ DONE←DEBUG←0
  ic.SetProp'.' 'EventMode' 1
  commandName←client,'.WorkerReady'
 
@@ -19,17 +19,20 @@
      :Case 'Close'
          DONE←1
          ⎕←'Server closed the connection.'
+	 
      :Case 'Receive'
         ⍝ TODO: PROCESS TASK
-         ⎕←'Processing: 'task
-
-         success←~∨/'ERROR'⍷task
-
-         :If ∨/'DEBUG'⍷task
-             EXEC task
-         :Else
-             EXEC task
-         :EndIf
+	⎕←'task info'
+	⎕←task
+	⎕←⍴task
+	:If 'DEBUG'≡⊃task
+	    DEBUG←~DEBUG
+	    ⎕←'DEBUGGING: ',(1+DEBUG)⌷'OFF' 'ON'
+ 	    ##.Utils.Check ic.Send commandName('WORKER'(QNames 'START'))
+	:Else
+	    ⎕←'Processing: 'task
+	    EXEC task
+	:EndIf
 
      :Case 'Timeout'
          ⎕←'Max time waited'

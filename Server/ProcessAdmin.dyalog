@@ -8,13 +8,15 @@
  :Case 'startworker'
      a← ∊{⍺' '⍵}/args
      ⍝ standalone process
-     INSTANCES,← ⎕NEW APLProcess ('s' a)
+     WORKERINSTANCES,← ⎕NEW APLProcess ('s' a)
      ic.Respond command((action': '),'Worker workspace started. TODO, before responding, wait to get successful status back from the process')
      ⎕←'starting worker'
 
 
  :Case 'debugmode'
      DEBUG_MODE←args
+     ⎕←WORKERS
+     {ic.Respond ⍵ ('DEBUG' args)}¨WORKERS
      ic.Respond command((action': '),⊂DEBUG_MODE)
      ⎕←'DEBUG UPDATED: 'DEBUG_MODE
 

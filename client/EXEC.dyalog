@@ -5,7 +5,6 @@ EXEC task;⎕TRAP;r
 ⎕←'the task id is ' , task_id
 ⎕←'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 timeStarted ← ⎕TS
-DEBUG←1
 :If DEBUG
     ⎕TRAP←(777 'C' '→ERROR')(0 'E' 'HandleDebug')
 :Else

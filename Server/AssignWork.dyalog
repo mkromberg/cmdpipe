@@ -1,25 +1,26 @@
  r←AssignWork dummy;n;readyWorkers;getTodoIndices;getWorkerLocations;workerLocations;todoIndices;workersToAssign;uniqueIndices;todos;workers;unprocessed
  r←0
+ ⍝⍝⍝  The functions freq, findWorker, getQ were written by Adam
+ ⍝⍝⍝  Uses statystical analysis to determine which Q to process in which order
+ ⍝⍝⍝  First: find the Q to Process
+ ⍝⍝⍝  Next:  find the worker who can process the Q
+ ⍝⍝⍝  Assign the worker and 0 out the worker status/unprocessed
+ ⍝⍝⍝  Repeat until there are no more tasks read to be process, or there are no more workers ready
+ ⍝⍝⍝  To see why this is necessary take the following case
+ ⍝⍝⍝  each Worker can process column 1, but only one worker can process column 3
 
- ⍝ The functions freq, findWorker, getQ were written by Adam
- ⍝ Uses statystical analysis to determine which Q to process in which order
- ⍝ First: find the Q to Process
- ⍝ Next:  find the worker who can process the Q
- ⍝ Assign the worker and 0 out the worker status/unprocessed
- ⍝ Repeat until there are no more tasks read to be process, or there are no more workers ready
- ⍝ To see why this is necessary take the following case
- ⍝ each Worker can process column 1, but only one worker can process column 3
- ⍝     QvsWORKERS
- ⍝ 1 0 1
- ⍝ 1 1 0
- ⍝ 1 1 0
- ⍝ How will I distribute the following tasks among the above workers?
- ⍝ Naive, you might have the first 2 tasks submitted to the first 2 users, but worker 3 will sit idle
- ⍝     QvsTASKS
- ⍝ 1 0 0
- ⍝ 1 0 0
- ⍝ 0 0 1
- ⍝ If instead we assign first task 3 to worker 1, workers 2 and 3 can safely execute the remaining tasks
+ ⍝⍝⍝      QvsWORKERS
+ ⍝⍝⍝  1 0 1
+ ⍝⍝⍝  1 1 0
+ ⍝⍝⍝  1 1 0
+ ⍝⍝⍝  How will I distribute the following tasks among the above workers?
+ ⍝⍝⍝  Naively, you might have the first 2 tasks submitted to the first 2 users, but worker 3 will sit idle
+
+ ⍝⍝⍝      QvsTASKS
+ ⍝⍝⍝  1 0 0
+ ⍝⍝⍝  1 0 0
+ ⍝⍝⍝  0 0 1
+ ⍝⍝⍝  If instead we assign first task 3 to worker 1, workers 2 and 3 can safely execute the remaining tasks
 
  freq      ←{(≢QS)↑(⊢÷+/) {¯1+≢⍵} ⌸ (⍳≢QS),⍵}  ⍝ just to be safe only take the count of qs ab
  findWorker←{⊃⍒ QvsWORKERS[;⍵] ÷+/QvsWORKERS (×⍤1 1) freq ⍺}
@@ -49,5 +50,4 @@
     :EndIf
 
     ⎕DIV←0 ⍝ reset division by zero for the rest of the application
-
  :EndIf

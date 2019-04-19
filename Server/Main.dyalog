@@ -4,18 +4,20 @@
 ⎕SE.UCMD 'Load APLProcess'
 
 
-INSTANCES←⍬
  ⍝ N.B. Call Main by passing the result Server.Make 
 
  DEBUG_MODE ← 1
  DONE r     ← 0
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
- ⍝        WORKERS          ⍝
+ ⍝        WORKERS     ⍝
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
  
  ⍝ WORKERS is a nested character vector of "command names"
  ⍝ which are used to respond using Conga
- WORKERS      ← ⍬
+ WORKERS ← ⍬
+
+ ⍝ Keep track of workers so the connection stays open
+ WORKERINSTANCES ← ⍬
 
  ⍝ WORKERS_TIME is a list of ⎕TS tracking the time a given
  ⍝ WORKER first reported as being ready 
@@ -27,10 +29,10 @@ INSTANCES←⍬
 
  ⍝ a boolean matrix where each row is a worker and each column is a Q
  ⍝ keeps track of which worker can process which Q
- QvsWORKERS   ← ⍬
+ QvsWORKERS ← ⍬
 
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
- ⍝        TASKS            ⍝
+ ⍝        TASKS       ⍝
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
  
  ⍝ TASKS Data type is a dynamic data type
@@ -50,8 +52,8 @@ INSTANCES←⍬
  ⍝ a boolean vector denoting whether a task has been assign to a worker
  PROCESSED ← ⍬
 
- RESULT_HISTORY←⍬
- ERROR_HISTORY ←⍬
+ RESULT_HISTORY ← ⍬
+ ERROR_HISTORY  ← ⍬
 
  ⍝ QS is a nested character vector tracking all QS
  ⍝ If no Q is assigned to a worker or task, the default Q is assigned
@@ -78,7 +80,7 @@ INSTANCES←⍬
  }
 
 
- ic.SetProp'.' 'EventMode' 1
+ ic.SetProp '.' 'EventMode' 1
  :While ~DONE
      AssignWork 0
      PrintState 0
