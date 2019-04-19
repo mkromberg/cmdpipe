@@ -4,6 +4,7 @@
 ⎕SE.UCMD 'Load APLProcess'
 
 
+INSTANCES←⍬
  ⍝ N.B. Call Main by passing the result Server.Make 
 
  DEBUG_MODE ← 1
