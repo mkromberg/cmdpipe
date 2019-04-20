@@ -26,9 +26,9 @@
 	⎕←task
 	⎕←⍴task
 	:If 'DEBUG'≡⊃task
-	    DEBUG←~DEBUG
+	    DEBUG←2⊃task
 	    ⎕←'DEBUGGING: ',(1+DEBUG)⌷'OFF' 'ON'
- 	    ##.Utils.Check ic.Send commandName('WORKER'(QNames 'START'))
+ 	    ##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
 	:Else
 	    ⎕←'Processing: 'task
 	    EXEC task

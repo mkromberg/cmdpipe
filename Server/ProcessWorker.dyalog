@@ -4,11 +4,10 @@
  getStatus←{(statuses⍳⊆⍵)-2}
 
  (worker message)←args    ⍝ for more information about this data structure
- (body status)←message ⍝ see ../client/Main.dyalog
+ (body status)   ←message ⍝ see ../client/Main.dyalog
 
  :Select status
  :Case 'START' ⍝ add worker to qs add new qs to qs table
-
      qs←body
      AddNewQ qs
      eqs←DEFAULT,⊆qs
@@ -22,10 +21,9 @@
              QvsWORKERS←(1(≢QS))⍴QS∊eqs
          :EndIf
      :EndIf
-     status←'READY'
-
-
-
+     ⍝ worker is not ready yet, set the debug mode for the worker
+     ic.Respond worker ('DEBUG' DEBUG_MODE)
+     
 
  :Case 'FINISHED' ⍝ record results and task
      (task_id timeStarted timeCompleted expr r) ← 5↑body
@@ -34,6 +32,7 @@
      status←'READY'
 
  :Case 'READY'
+     status←'READY'
      debugMessage←'WORKER IS READY'
 
  :Case 'ERROR'
@@ -46,6 +45,7 @@
      ⎕←''
      ERROR_HISTORY,←⊂worker debugMessage
      ic.Respond ⎕←worker'Server is waiting for worker to finish debugging...'
+
  :EndSelect
 
  WORKERSTATUS[WORKERS⍳⊆worker]←getStatus status
