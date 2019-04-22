@@ -4,7 +4,7 @@
  ic.SetProp'.' 'EventMode' 1
  commandName←client,'.WorkerReady'
 
-⍝ the WORKER is ready to accept work
+ ⍝ the WORKER is ready to accept work
  ##.Utils.Check ic.Send commandName('WORKER'(QNames 'START'))
 
  :While ~DONE

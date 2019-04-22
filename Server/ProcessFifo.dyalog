@@ -14,9 +14,9 @@
  AddNewQ Q
 
  :If QvsTASKS≢⍬
-     QvsTASKS⍪←QS∊(⊆Q)
+     QvsTASKS⍪←QS∊⊆,Q
  :Else
-     QvsTASKS←(1(≢QS))⍴QS∊⊆Q
+     QvsTASKS←(1(≢QS))⍴QS∊⊆,Q
  :EndIf
  PROCESSED,←0
 

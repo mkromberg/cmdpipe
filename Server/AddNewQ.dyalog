@@ -1,10 +1,10 @@
  r←AddNewQ newQS
  ⎕←'TESTING NEW QS: 'newQS
- :If (⊂'WORKER')∊newQS
-     ...
+ :If (⊂'WORKER') ∊ newQS
+     ∘∘∘
 
  :EndIf
- eqs←⊆newQS
+ eqs←⊆,newQS
  QS,←new←⊆(~eqs∊QS)/eqs
 
  matpend ←{⍵ (,⍤1) ((≢new) ⍴ 0)}

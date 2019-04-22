@@ -55,6 +55,8 @@
 
      ⎕←'WORKER INFO REQUESTED'
 
+ :Case 'break'
+     ∘∘∘
  :Case 'results'
      ic.Respond command((action': \n')(('TASK' 'RESULT')⍪↑RESULT_HISTORY))
      ⎕←'RESULTS REQUESTED'

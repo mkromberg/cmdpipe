@@ -29,16 +29,18 @@
  ⍝ PROCESSED represents which tasks yet to be processed
  ⍝ Therefore this branch holds true only when there are workers able to
  ⍝ process an unprocessed task
- :If 0≠⌊/≢¨(⍳+/~PROCESSED) WORKERS
+ :If 0≠⌊/≢¨(⍳+/~PROCESSED) (⍳+/1=WORKERSTATUS)
+
     ⍝ TODO: Turn the following into a loop 
     ⍝ Which processes each q in turn
     ⎕DIV←1 ⍝ safe division by zero for getQ function
 
+    ⍝ u q w t, unprocessed, selected queue, worker, task
     unprocessed ← (~PROCESSED) (∧⍤0 1) QvsTASKS
     u ← (temp≤≢QS)/temp←unprocessed  (⍳⍤1) 1
 
     ⍝ the below result will be 0 if there are no workers able to process the given task
-    :If 0<+/×⌿QvsWORKERS⍪freq u
+    :If 0<+/+/QvsWORKERS(×⍤1 1)freq u
 	q ← getQ u
 	w ← u findWorker q
 	t ← unprocessed[;q] ⍳1

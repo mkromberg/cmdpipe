@@ -1,5 +1,6 @@
 HandleDebug
 
+success←0
 ⎕←'Sending DEBUG message to server...'
 
 ##.Utils.Check ic.Send commandName ('WORKER' (('Error proccessing: ' task) 'DEBUG'))

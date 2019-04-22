@@ -23,6 +23,7 @@
      :EndIf
      ⍝ worker is not ready yet, set the debug mode for the worker
      ic.Respond worker ('DEBUG' DEBUG_MODE)
+     status←'READY'
      
 
  :Case 'FINISHED' ⍝ record results and task
