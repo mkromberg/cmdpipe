@@ -2,8 +2,8 @@
  action←⊃1↑content
  args←1↓content
 
-⍝ TODO each commaand should check the forms of arguments
-
+ 
+ ⍝ TODO each commaand should check the forms of arguments
  :Select action
  :Case 'startworker'
      ⍝ args are split on space, (k=v) (k=v) (k=v)
@@ -55,8 +55,19 @@
 
      ⎕←'WORKER INFO REQUESTED'
 
- :Case 'break'
-     ∘∘∘
+ :Case 'taskinfo'
+    ⍝ this :Case could potentially take arguments for specific statistics regarding tasks
+    ⍝ only take completed tasks for now
+    ⍝ time in Q is not accurate for tasks that are not processed
+    ⍝ for tasks which are not yet processed get a current time stamp
+    ⍝ same for timeToProcess
+    taskTimes     ← ¯3↑¨TASKS               ⍝ the final 3 items in a task are the times related to the task
+    timeInQ       ← ↑|-/ ↑ 2    ↑¨taskTimes ⍝ subtract the first 2 items for each task
+    computeTime   ← ↑|-/ ↑¯2    ↑¨taskTimes ⍝ subtract the last  2 items for each task
+    timeToProcess ← ↑|-⌿ 1 ¯1 ∘.↑ taskTimes ⍝ subtract the first and last items for each task
+
+    ⍝ further, the tasks should be associated with the worker assigned to the task if possible
+
  :Case 'results'
      ic.Respond command((action': \n')(('TASK' 'RESULT')⍪↑RESULT_HISTORY))
      ⎕←'RESULTS REQUESTED'

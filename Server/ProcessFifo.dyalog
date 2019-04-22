@@ -2,13 +2,13 @@
  (Q message)←content
  ⎕←'Incoming FIFO message: ',message
 
-⍝ call a function that the user will override
-⍝ user defined exit to declare what queue the task belongs to
+ ⍝ call a function that the user will override
+ ⍝ user defined exit to declare what queue the task belongs to
 
-⍝ OVERRIDEQ returns Q as default
-⍝ user specifies an override to the function to handle different Q logic
-⍝ Q←Q OVERRIDEQ message
-
+ ⍝ OVERRIDEQ returns Q as default
+ ⍝ user specifies an override to the function to handle different Q logic
+ ⍝ Q←Q OVERRIDEQ message
+ 
  Q←message DefaultOverrideQ Q
 
  AddNewQ Q
@@ -18,10 +18,12 @@
  :Else
      QvsTASKS←(1(≢QS))⍴QS∊⊆,Q
  :EndIf
- PROCESSED,←0
+ PROCESSED   ,←0
+ ASSIGNED    ,←0
+ TASKvsWORKER,←0
 
- TASK_ID,←1+≢TASK_ID
- TASKS,←(⊂message ⎕TS)
+ TASK_ID ,← 1+≢TASK_ID
+ TASKS   ,← (⊂message ⎕TS)
  ic.Respond fifoCommand'SUCCESS'
 
  r←0

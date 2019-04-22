@@ -30,6 +30,7 @@
      (task_id timeStarted timeCompleted expr r) ← 5↑body
      RESULT_HISTORY,←⊂expr r
      TASKS[task_id]←⊂(⊃TASKS[task_id]),timeStarted timeCompleted
+     PROCESSED[task_id]←1
      status←'READY'
 
  :Case 'READY'

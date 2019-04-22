@@ -52,6 +52,14 @@
  ⍝ a boolean vector denoting whether a task has been assign to a worker
  PROCESSED ← ⍬
 
+ ⍝ ASSIGNED notes whether a worker has been assigned to process a task
+ ASSIGNED  ← ⍬
+
+ ⍝ Notes the index of the worker worker that was assigned to accomplish a task
+ ⍝ index of a worker, stored in order by task
+ TASKvsWORKER ← ⍬
+
+
  RESULT_HISTORY ← ⍬
  ERROR_HISTORY  ← ⍬
 
@@ -67,7 +75,7 @@
 
      n←⊃⌽⍴↑TASKS
      ⎕←'TASKS TABLE:'
-     ⎕←(('ID' 'PROCESSED',QS)⍪(TASK_ID,PROCESSED,QvsTASKS)),(n↑columns)⍪↑TASKS
+     ⎕←(('ID' 'ASSIGNED' 'PROCESSED' 'ASSIGNED TO',QS)⍪(TASK_ID,ASSIGNED,PROCESSED,TASKvsWORKER,QvsTASKS)),(n↑columns)⍪↑TASKS
      ⎕←''
 
      ⎕←'ERROR HISTORY:'
