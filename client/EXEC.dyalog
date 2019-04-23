@@ -25,3 +25,4 @@ EXEC task;⎕TRAP;r
  →0
  ERROR:
      ⎕←'Notify server of error'
+     ##.Utils.Check ic.Send commandName ('WORKER' (('Error proccessing: ' task) 'DEBUG'))

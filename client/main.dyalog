@@ -21,13 +21,12 @@
          ⎕←'Server closed the connection.'
 	 
      :Case 'Receive'
-        ⍝ TODO: PROCESS TASK
-	⎕←'task info'
-	⎕←task
-	⎕←⍴task
 	:If 'DEBUG'≡⊃task
 	    DEBUG←2⊃task
 	    ⎕←'DEBUGGING: ',(1+DEBUG)⌷'OFF' 'ON'
+ 	    ##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
+	:ElseIf ∧/'ERROR'∊task
+	    ⎕←task
  	    ##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
 	:Else
 	    ⎕←'Processing: 'task

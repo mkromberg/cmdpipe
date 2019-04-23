@@ -51,25 +51,41 @@
 
  :Case 'workerinfo'
      result←('worker command name' 'status',QS)⍪(WORKERS,WORKERSTATUS,QvsWORKERS)
-     ic.Respond command((action':\n'),result)
+     ic.Respond command((action':'),result)
 
      ⎕←'WORKER INFO REQUESTED'
 
- :Case 'taskinfo'
+ :Case 'tasktime'
     ⍝ this :Case could potentially take arguments for specific statistics regarding tasks
     ⍝ only take completed tasks for now
     ⍝ time in Q is not accurate for tasks that are not processed
     ⍝ for tasks which are not yet processed get a current time stamp
     ⍝ same for timeToProcess
-    taskTimes     ← ¯3↑¨TASKS               ⍝ the final 3 items in a task are the times related to the task
-    timeInQ       ← ↑|-/ ↑ 2    ↑¨taskTimes ⍝ subtract the first 2 items for each task
-    computeTime   ← ↑|-/ ↑¯2    ↑¨taskTimes ⍝ subtract the last  2 items for each task
-    timeToProcess ← ↑|-⌿ 1 ¯1 ∘.↑ taskTimes ⍝ subtract the first and last items for each task
+    (type conversion)←2↑args
+    fmt←24 60 60 1000
+    con←'h' 'm' 's' 'ms'
+
+    ⍝ wrap in a box if not boxed
+    :If 1<≢conversion
+        conversion←⊆conversion
+    :EndIf
+
+    c←(con⍳conversion)↑fmt
+    format←{c⊥(≢c)↑3↓⍵}
+
+    fields← (1 2) (2 3) (1 3)
+    types ← 'tts' 'ttc' 'ttp'
+    f←fields⌷⍨types⍳⊆type
+    
+    padEmpty←↑{(1↓⍵),(4-≢⍵)⍴⊂⎕TS}¨TASKS
+
+    result← |-/format¨ f⌷[2] padEmpty
+    ic.Respond command((action':'),result)
 
     ⍝ further, the tasks should be associated with the worker assigned to the task if possible
 
  :Case 'results'
-     ic.Respond command((action': \n')(('TASK' 'RESULT')⍪↑RESULT_HISTORY))
+     ic.Respond command((action': ')(('TASK' 'RESULT')⍪↑RESULT_HISTORY))
      ⎕←'RESULTS REQUESTED'
 
  :Else

@@ -1,7 +1,13 @@
 # cmdpipe
-APL processor for commands arriving on a fifo / pipe
+### Description:
+APL Task management system. Receive tasks via socket, and distribute them accross workers.
 
-## Basic functionality so far:
+### Prerequisites:
+This project depends on the most common APLCore library, and Link library
+https://github.com/Dyalog/library-core
+https://github.com/Dyalog/link
+
+### Usage:
 Start a server
 ```
 ]link.import # 'path\to\cmdpipe\Server'

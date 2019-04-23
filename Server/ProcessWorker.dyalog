@@ -1,4 +1,4 @@
- r←ProcessWorker args;statuses;getStatus;worker;qs;status;message;eqs;body
+ r←ProcessWorker args;statuses;getStatus;worker;qs;status;message;eqs;body;task_id;timeStarted;timeCompleted;expr;r;statuses
  ⍝ args are command and workerQNames
  statuses←'DEBUG' 'BUSY' 'READY'
  getStatus←{(statuses⍳⊆⍵)-2}
@@ -46,7 +46,11 @@
      ⎕←debugMessage←qs
      ⎕←''
      ERROR_HISTORY,←⊂worker debugMessage
-     ic.Respond ⎕←worker'Server is waiting for worker to finish debugging...'
+     :If DEBUG_MODE
+          ic.Respond worker 'Server is waiting for worker to finish debugging...'
+     :Else
+          ic.Respond worker 'ERROR received'
+     :EndIf
 
  :EndSelect
 
