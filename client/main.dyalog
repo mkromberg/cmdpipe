@@ -1,4 +1,4 @@
- r←Main(QNames ic client);DONE;code;command;event;task;commandName;DEBUG
+ r←Main(QNames ic client);DONE;code;command;event;args;commandName;DEBUG
 
  DONE←DEBUG←0
  ic.SetProp'.' 'EventMode' 1
@@ -8,7 +8,7 @@
  ##.Utils.Check ic.Send commandName('WORKER'(QNames 'START'))
 
  :While ~DONE
-     (code command event task)←a←ic.Wait commandName 10000
+     (code command event args)←a←ic.Wait commandName 10000
      :If code≠0
          DONE←1
          ⎕←'Unexpected Worker Error.'
@@ -21,13 +21,16 @@
          ⎕←'Server closed the connection.'
 	 
      :Case 'Receive'
-        (message body)←task
+        (message body)←args
         :Select message
 	    :Case 'TASK'
+	        ⍝ this is unpacked to make debugging easier
+	        (task time id)←3↑body
 		⎕←'Processing: 'body
-		EXEC body
+		EXEC task time id
 
 	    :Case 'DEBUGMODE'
+	        ⍝ server sets the debug mode on the worker
 		DEBUG←body
 		⎕←'DEBUGGING: ',(1+DEBUG)⌷'OFF' 'ON'
 		##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
@@ -37,21 +40,6 @@
 		##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
 
 	:EndSelect
-
-⍝	:If 'DEBUG'≡⊃body
-⍝	    DEBUG←2⊃body
-⍝	    ⎕←'DEBUGGING: ',(1+DEBUG)⌷'OFF' 'ON'
-⍝ 	    ##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
-⍝
-⍝	:ElseIf ∧/'ERROR'∊body
-⍝	    ⎕←body
-⍝ 	    ##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
-⍝
-⍝	:Else
-⍝	    ⎕←'Processing: 'body
-⍝	    EXEC body
-⍝
-⍝	:EndIf
 
      :Case 'Timeout'
          ⎕←'Max time waited'

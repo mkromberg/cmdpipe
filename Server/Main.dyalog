@@ -1,10 +1,7 @@
  r←Main(ic server);code;command;event;body;type;content;DONE;TODO;WORKERS;WORKERSTATUS;QvsWORKERS;QvsTASKS;QS;WORKERS_TIME;DEBUG_MODE;RESULT_HISTORY;ERROR_HISTORY;DEFAULT;PROCESSED;TASK_ID;ASSIGNED
 
-⍝ Requred for starting a worker process in ProcessAdmin
-⎕SE.UCMD 'Load APLProcess'
-
-
- ⍝ N.B. Call Main by passing the result Server.Make 
+ ⍝ Requred for starting a worker process in ProcessAdmin
+ ⎕SE.UCMD 'Load APLProcess'
 
  DEBUG_MODE ← 1
  DONE r     ← 0
