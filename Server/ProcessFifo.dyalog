@@ -1,4 +1,4 @@
- r←ProcessFifo(ic fifoCommand content);Q;message
+ r←ProcessFifo(fifoCommand content ic);Q;message
  (Q message)←content
  ⎕←'Incoming FIFO message: ',message
 

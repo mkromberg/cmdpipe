@@ -105,7 +105,7 @@
      :Case 'Receive'
          :Select type
 	 :Case 'FIFO'
-             ProcessFifo ic command content
+             ProcessFifo command content ic
 
          :Case 'WORKER'
              ProcessWorker command content
@@ -124,5 +124,4 @@
      :Case 'TIMEOUT'
          ⍝ TODO: Do something with the timeout message?
      :EndSelect
-
  :EndWhile

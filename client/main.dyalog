@@ -21,17 +21,37 @@
          ⎕←'Server closed the connection.'
 	 
      :Case 'Receive'
-	:If 'DEBUG'≡⊃task
-	    DEBUG←2⊃task
-	    ⎕←'DEBUGGING: ',(1+DEBUG)⌷'OFF' 'ON'
- 	    ##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
-	:ElseIf ∧/'ERROR'∊task
-	    ⎕←task
- 	    ##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
-	:Else
-	    ⎕←'Processing: 'task
-	    EXEC task
-	:EndIf
+        (message body)←task
+        :Select message
+	    :Case 'TASK'
+		⎕←'Processing: 'body
+		EXEC body
+
+	    :Case 'DEBUGMODE'
+		DEBUG←body
+		⎕←'DEBUGGING: ',(1+DEBUG)⌷'OFF' 'ON'
+		##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
+
+	    :Case 'ERROR'
+		⎕←body
+		##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
+
+	:EndSelect
+
+⍝	:If 'DEBUG'≡⊃body
+⍝	    DEBUG←2⊃body
+⍝	    ⎕←'DEBUGGING: ',(1+DEBUG)⌷'OFF' 'ON'
+⍝ 	    ##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
+⍝
+⍝	:ElseIf ∧/'ERROR'∊body
+⍝	    ⎕←body
+⍝ 	    ##.Utils.Check ic.Send commandName('WORKER' (⊂'READY'))
+⍝
+⍝	:Else
+⍝	    ⎕←'Processing: 'body
+⍝	    EXEC body
+⍝
+⍝	:EndIf
 
      :Case 'Timeout'
          ⎕←'Max time waited'

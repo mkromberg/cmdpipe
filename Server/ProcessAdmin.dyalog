@@ -43,7 +43,8 @@
      :Else 
 	DEBUG_MODE←a
 	⎕←WORKERS
-	{ic.Respond ⍵ ('DEBUG' a)}¨WORKERS
+	{ic.Respond ⍵ ('DEBUGMODE' a)}¨WORKERS
+
 	ic.Respond command((action': '),⊂DEBUG_MODE)
 	⎕←'DEBUG UPDATED: 'DEBUG_MODE
      :EndIf

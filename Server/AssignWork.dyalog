@@ -22,7 +22,7 @@
 	w ← u findWorker q
 	t ← unassigned[;q] ⍳1
 
-	ic.Respond (⊃WORKERS[w]) ((⊃TASKS[t]), TASK_ID[t])
+	ic.Respond (⊃WORKERS[w]) ('TASK' ((⊃TASKS[t]), TASK_ID[t]))
 
 	ASSIGNED[t]←1
 	TASKvsWORKER[t]←w

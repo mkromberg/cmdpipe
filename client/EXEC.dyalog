@@ -2,8 +2,6 @@ EXEC task;⎕TRAP;r
 
  (expr timestamp task_id)←3↑task
 
- ⎕←'the task id is ' , task_id
- ⎕←'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
  timeStarted ← ⎕TS
  :If DEBUG
      ⎕TRAP←(777 'C' '→ERROR')(0 'E' 'HandleDebug')
@@ -23,6 +21,7 @@ EXEC task;⎕TRAP;r
  ##.Utils.Check ic.Send commandName('WORKER' ((task_id timeStarted timeCompleted expr r) status))
 
  →0
+
  ERROR:
      ⎕←'Notify server of error'
-     ##.Utils.Check ic.Send commandName ('WORKER' (('Error proccessing: ' task) 'DEBUG'))
+     ##.Utils.Check ic.Send commandName ('WORKER' (('Error proccessing: ' task) 'ERROR'))
