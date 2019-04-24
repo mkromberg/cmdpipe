@@ -1,11 +1,13 @@
- r←Main(QNames ic client);DONE;code;command;event;args;commandName;DEBUG
+ r←Main(QNames ride_port ic client);DONE;code;command;event;args;commandName;DEBUG
 
+ RIDE_PORT←ride_port
+ ⎕←'THIS IS THE RIDE PORT:' ride_port
  DONE←DEBUG←0
  ic.SetProp'.' 'EventMode' 1
  commandName←client,'.WorkerReady'
 
  ⍝ the WORKER is ready to accept work
- ##.Utils.Check ic.Send commandName('WORKER'(QNames 'START'))
+ ##.Utils.Check ic.Send commandName('WORKER'((QNames RIDE_PORT) 'START'))
 
  :While ~DONE
      (code command event args)←a←ic.Wait commandName 10000

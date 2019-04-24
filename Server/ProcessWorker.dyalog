@@ -8,7 +8,7 @@
 
  :Select status
  :Case 'START' ⍝ add worker to qs add new qs to qs table
-     qs←body
+     (qs ride_port)←body
      AddNewQ qs
      eqs←DEFAULT,⊆qs
      :If ~(⊆worker)∊WORKERS
@@ -21,6 +21,7 @@
              QvsWORKERS←(1(≢QS))⍴QS∊eqs
          :EndIf
      :EndIf
+     WORKERPORTNUMS←WORKERPORTNUMS,⊂ride_port
      ⍝ worker is not ready yet, set the debug mode for the worker
      ic.Respond worker ('DEBUGMODE' DEBUG_MODE)
      status←'READY'

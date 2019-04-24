@@ -34,7 +34,7 @@
 		NEWPORTNUM←3501
 	    :EndIf
 	    WORKERINSTANCES,← ⎕NEW APLProcess ('s' (a, ' RIDE_INIT=SERVE:*:',⍕NEWPORTNUM))
-	    WORKERPORTNUMS←WORKERPORTNUMS,NEWPORTNUM
+	    ⍝ WORKERPORTNUMS←WORKERPORTNUMS,NEWPORTNUM
 	    ic.Respond command((action': '),'Worker workspace started. TODO, before responding, wait to get successful status back from the process')
 	    ⎕←'starting worker'
 	:EndIf

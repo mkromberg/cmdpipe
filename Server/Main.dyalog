@@ -70,7 +70,7 @@
  ⍝ a gui function displaying the current state
  PrintState←{
      ⎕←'Worker table:'
-     ⎕←('WORKER COMMAND NAME' 'READY TIME' 'STATUS',QS)⍪(WORKERS,WORKERS_TIME,WORKERSTATUS,QvsWORKERS)
+     ⎕←('WORKER COMMAND NAME' 'READY TIME' 'STATUS' 'PORT' ,QS)⍪(WORKERS,WORKERS_TIME,WORKERSTATUS,WORKERPORTNUMS,QvsWORKERS)
      ⎕←''
 
      n←⊃⌽⍴↑TASKS
