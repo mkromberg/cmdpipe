@@ -1,28 +1,44 @@
  r←ProcessAdmin(command content ic);action;args;result
- action←⊃1↑content
- args←1↓content
+ action ←1⊃content
 
  
  ⍝ TODO each commaand should check the forms of arguments
  :Select action
- :Case 'startworker'
-     ⍝ args are split on space, (k=v) (k=v) (k=v)
-     a← ∊{⍺' '⍵}/args
+ :Case 'done'
+     DONE←1
+     ic.Respond command((action,': '), 'Server exiting...')
+ :Case 'worker'
+     subaction←2⊃content
+     args     ←2↓content
+     :Select subaction
+     :Case 'status'
+	ic.Respond command((action,' ',subaction,': '), WORKERSTATUS)
+     	  
+     :Case 'start'
+     
+	⍝ args are split on space, (k=v) (k=v) (k=v)
+	a← ∊{⍺' '⍵}/args
 
-     ⍝ Check that all the required arguments are in args
-     :If 0=≢args
-	ic.Respond command ((action': incorrect arguments'),⊂a)
+	⍝ Check that all the required arguments are in args
+	:If 0=≢args
+	    ic.Respond command ((action': incorrect arguments'),⊂a)
 
-     :ElseIf ~4= +/'dir' 'ip' 'port' 'qs' ∊ {1⊃'='(≠⊆⊢)⍵}¨args
-	ic.Respond command ((action': incorrect arguments'),⊂a)
+	:ElseIf ~4= +/'dir' 'ip' 'port' 'qs' ∊ {1⊃'='(≠⊆⊢)⍵}¨args
+	    ic.Respond command ((action': incorrect arguments'),⊂a)
 
-     :Else
-	⍝ standalone process
-	WORKERINSTANCES,← ⎕NEW APLProcess ('s' a)
-	ic.Respond command((action': '),'Worker workspace started. TODO, before responding, wait to get successful status back from the process')
-	⎕←'starting worker'
-     :EndIf
-
+	:Else
+	    ⍝ standalone process
+	    :If 3600>NEWPORTNUM
+		NEWPORTNUM+←1
+	    :Else
+		NEWPORTNUM←3501
+	    :EndIf
+	    WORKERINSTANCES,← ⎕NEW APLProcess ('s' (a, ' RIDE_INIT=SERVE:*:',⍕NEWPORTNUM))
+	    WORKERPORTNUMS←WORKERPORTNUMS,NEWPORTNUM
+	    ic.Respond command((action': '),'Worker workspace started. TODO, before responding, wait to get successful status back from the process')
+	    ⎕←'starting worker'
+	:EndIf
+     :EndSelect
 
  :Case 'debugmode'
      ⍝ First 3 checks are to avoid errors

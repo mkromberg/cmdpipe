@@ -3,12 +3,15 @@
  ⍝ Requred for starting a worker process in ProcessAdmin
  ⎕SE.UCMD 'Load APLProcess'
 
+
  DEBUG_MODE ← 1
  DONE r     ← 0
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
  ⍝        WORKERS     ⍝
  ⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝⍝
  
+ NEWPORTNUM←3501
+ WORKERPORTNUMS←⍬
  ⍝ WORKERS is a nested character vector of "command names"
  ⍝ which are used to respond using Conga
  WORKERS ← ⍬
@@ -122,3 +125,8 @@
          ⍝ TODO: Do something with the timeout message?
      :EndSelect
  :EndWhile
+
+ :If 0<≢WORKERINSTANCES
+     ⍝ cleanup running workers
+     WORKERINSTANCES.Kill
+ :EndIf
