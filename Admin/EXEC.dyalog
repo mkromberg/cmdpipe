@@ -12,17 +12,18 @@ DONE←0
   :EndIf
 
   ⍝ Stop accepting new commands, close the admin session
-  :If (⊃input) ≡ 'exit'
-      DONE←1
-  :EndIf
+  DONE←(⊃input) ≡ 'exit'
 
   :If DONE ∨ 0=≢input
+      ⍝ don't send any requests to the server if done
       :Continue
   :EndIf
 
   ⍝ Send the input to the server and await the servers response
   ##.Utils.Check ic.Send COMMANDNAME ('ADMIN' input)
   (code command event result)←ic.Wait COMMANDNAME 10000
+
+  DONE←(⊃input) ≡ 'done'
 
   ⍝ Handle server events
   :If code≠0
