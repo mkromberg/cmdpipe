@@ -1,4 +1,4 @@
- r←AssignWork dummy;u;q;w;t;unassigned;freq;findWorker;getQ
+ r←AssignWork dummy;u;q;w;t;unassigned;freq;findWorker;getQ;⎕DIV
  
  ⍝⍝⍝  The statistical functions freq, findWorker, getQ were written by Adam
  freq      ←{(≢QS)↑(⊢÷+/) {¯1+≢⍵} ⌸ (⍳≢QS),⍵}  ⍝ just to be safe only take the count of qs ab
@@ -28,7 +28,5 @@
 	TASKvsWORKER[t]←w
 
     :EndIf
-
-    ⎕DIV←0 ⍝ reset division by zero for the rest of the application
  :EndIf
  r←0

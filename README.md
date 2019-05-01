@@ -43,5 +43,22 @@ client ← ic.Clt clientName <ip_server> <port_server> 'Command'
 ic.Send clientName ('FIFO' ('qName' aplCode))
 ```
 
+### Admin Commands
 
+There are 2 main command types: `worker` and `task`
+Below are a list of commands with example arguments
+```
+⍝ start a worker
+⍝ dir takes the path of the cmdpipe dir on the server
+⍝ the ip of the server relative to the worker
+⍝ the port of the running server
+⍝ the qnames, tells the server what QS a worker is allowed to process. Comma Separated, no spaces
+admin> worker start dir=<server cmdpipe dir> ip=<server ip> port=<server port> qs="<comma separated qNames"
 
+⍝ retrieve information about the worker
+admin> worker info
+
+⍝ retrieve current status of worker
+admin> worker status
+
+    

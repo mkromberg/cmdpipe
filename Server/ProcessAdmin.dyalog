@@ -2,11 +2,17 @@
  action ←1⊃content
 
  
+ unrecognized←{
+     ic.Respond command((⍵':')('Unrecognized command : "',⍵,'".'))
+     ⎕←'Admin attempted to call: '⍵
+ }
+
  ⍝ TODO each commaand should check the forms of arguments
  :Select action
  :Case 'done'
      DONE←1
      ic.Respond command((action,': '), 'Server exiting...')
+
  :Case 'worker'
      subaction←2⊃content
      args     ←2↓content
@@ -33,6 +39,8 @@
 	    :Else
 		NEWPORTNUM←3501
 	    :EndIf
+	    ⍝ newportnum←⊃(3500 + ⍳1+≢assigned)~assigned
+
 	    WORKERINSTANCES,← ⎕NEW APLProcess ('s' (a, ' RIDE_INIT=SERVE:*:',⍕NEWPORTNUM))
 	    ic.Respond command((action': '),'Worker workspace started. TODO, before responding, wait to get successful status back from the process')
 	    ⎕←'starting worker'
@@ -64,9 +72,11 @@
 
     :Case 'info'
 	result←('worker command name' 'status',QS)⍪(WORKERS,WORKERSTATUS,QvsWORKERS)
-	ic.Respond command((action':'),result)
+	ic.Respond command((action':') result)
 
 	⎕←'WORKER INFO REQUESTED'
+    :Else
+        unrecognized ,/action ' ' subaction
     :EndSelect
 
  :Case 'task'
@@ -106,6 +116,8 @@
  	 padEmpty←↑{(1↓⍵),(4-≢⍵)⍴⊂⎕TS}¨TASKS
  	 result  ← |-/format¨ f⌷[2] padEmpty
  	 ic.Respond command((action':'),result)
+     :Else
+	unrecognized ,/action ' ' subaction
  
      :EndSelect
 
@@ -114,7 +126,10 @@
      ⎕←'RESULTS REQUESTED'
 
  :Else
-     ic.Respond command((action':')('Unrecognized command : "',action,'".'))
-     ⎕←'Admin attempted to call: 'action
+     unrecognized action
 
  :EndSelect
+
+
+⍝ configurable workspace
+⍝ which will run any arbitrary file

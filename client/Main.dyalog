@@ -1,7 +1,6 @@
  r←Main(QNames ride_port ic client);DONE;code;command;event;args;commandName;DEBUG
 
  RIDE_PORT←ride_port
- ⎕←'THIS IS THE RIDE PORT:' ride_port
  DONE←DEBUG←0
  ic.SetProp'.' 'EventMode' 1
  commandName←client,'.WorkerReady'
